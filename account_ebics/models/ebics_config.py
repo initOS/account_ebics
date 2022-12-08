@@ -22,7 +22,6 @@ class EbicsConfig(models.Model):
     _order = "name"
 
     name = fields.Char(
-        string="Name",
         readonly=True,
         states={"draft": [("readonly", False)]},
         required=True,
@@ -52,7 +51,11 @@ class EbicsConfig(models.Model):
         help="Contact your bank to get the EBICS URL.",
     )
     ebics_version = fields.Selection(
-        selection=[("H003", "H003 (2.4)"), ("H004", "H004 (2.5)")],
+        selection=[
+            ("H003", "H003 (2.4)"),
+            ("H004", "H004 (2.5)"),
+            ("H005", "H005 (3.0)"),
+        ],
         string="EBICS protocol version",
         readonly=True,
         states={"draft": [("readonly", False)]},
@@ -130,7 +133,6 @@ class EbicsConfig(models.Model):
     )
     state = fields.Selection(
         [("draft", "Draft"), ("confirm", "Confirmed")],
-        string="State",
         default="draft",
         required=True,
         readonly=True,
@@ -143,7 +145,7 @@ class EbicsConfig(models.Model):
         "\nThis number should match the following pattern : "
         "[A-Z]{1}[A-Z0-9]{3}",
     )
-    active = fields.Boolean(string="Active", default=True)
+    active = fields.Boolean(default=True)
     company_ids = fields.Many2many(
         comodel_name="res.company",
         string="Companies",
